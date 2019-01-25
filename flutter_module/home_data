@@ -1,0 +1,67 @@
+{
+	"data": [{
+			"title": "Shrine",
+			"subtitle": "Basic shopping app",
+			"icon": "shrine",
+			"category": {
+				"name": "Studies",
+				"icon": "animation"
+			},
+			"routerName": "/shrine"
+		}, {
+			"title": "Contact profile",
+			"subtitle": "Address book entry with a flexible appbar",
+			"icon": "account_box",
+			"category": {
+				"name": "Studies",
+				"icon": "animation"
+			},
+			"routerName": "/contacts"
+		},
+		{
+			"title": "Bottom app bar",
+			"subtitle": "Optional floating action button notch",
+			"icon": "bottom_app_bar",
+			"category": {
+				"name": "Material",
+				"icon": "category_mdc"
+			},
+			"routerName": "/material/bottom_app_bar"
+		}, {
+			"title": "Activity Indicator",
+			"subtitle": "Select a front layer from back layer",
+			"icon": "cupertino_progress",
+			"category": {
+				"name": "Cupertino",
+				"icon": "phone_iphone"
+			},
+			"routerName": "/cupertino/progress_indicator"
+		}, {
+			"title": "Alerts",
+			"icon": "dialogs",
+			"category": {
+				"name": "Cupertino",
+				"icon": "phone_iphone"
+			},
+			"routerName": "/cupertino/alert"
+		}, {
+			"title": "Animated images",
+			"subtitle": "GIF and WebP animations",
+			"icon": "animation",
+			"category": {
+				"name": "Media",
+				"icon": "drive_video"
+			},
+			"routerName": "/images"
+		}, {
+			"title": "Video",
+			"subtitle": "Video playback",
+			"icon": "drive_video",
+			"category": {
+				"name": "Media",
+				"icon": "drive_video"
+			},
+			"routerName": "/video"
+		}
+	]
+}
