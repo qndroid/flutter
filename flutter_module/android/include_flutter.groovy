@@ -4,7 +4,7 @@ def scriptFile = getClass().protectionDomain.codeSource.location.path
 def flutterProjectRoot = new File(scriptFile).parentFile.parentFile
 
 gradle.include ':flutter'
-gradle.project(':flutter').projectDir = new File(flutterProjectRoot, '.android/Flutter')
+gradle.project(':flutter').projectDir = new File(flutterProjectRoot, 'android/Flutter')
 
 def plugins = new Properties()
 def pluginsFile = new File(flutterProjectRoot, '.flutter-plugins')

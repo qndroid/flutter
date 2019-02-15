@@ -1,40 +1,259 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.lianjia.fluttermodule.host">
+<manifest package="com.youdu"
+  xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- The INTERNET permission is required for development. Specifically,
-         flutter needs it to communicate with the running application
-         to allow setting breakpoints, to provide hot reload, etc.
-    -->
-    <uses-permission android:name="android.permission.INTERNET"/>
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  <uses-permission android:name="android.permission.VIBRATE" />
+  <uses-permission android:name="android.permission.CAMERA" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+  <uses-permission android:name="android.permission.FLASHLIGHT" />
 
-    <!-- io.flutter.app.FlutterApplication is an android.app.Application that
-         calls FlutterMain.startInitialization(this); in its onCreate method.
-         In most cases you can leave this as-is, but you if you want to provide
-         additional functionality it is fine to subclass or reimplement
-         FlutterApplication and put your custom class here. -->
-    <application
-        android:name="io.flutter.app.FlutterApplication"
-        android:label="flutter_module"
-        android:icon="@mipmap/ic_launcher">
-        <activity
-            android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density"
-            android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
-            <!-- This keeps the window background of the activity showing
-                 until Flutter renders its first frame. It can be removed if
-                 there is no splash screen (such as the default splash screen
-                 defined in @style/LaunchTheme). -->
-            <meta-data
-                android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
-                android:value="true" />
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-    </application>
+  <uses-feature android:name="android.hardware.camera" />
+  <uses-feature android:name="android.hardware.camera.autofocus" />
+
+  <!-- shareSDK所需权限 -->
+  <uses-permission android:name="android.permission.GET_TASKS" />
+  <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+  <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+  <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+
+  <!-- JPush permission -->
+  <permission
+    android:name="com.youdu.permission.JPUSH_MESSAGE"
+    android:protectionLevel="signature" />
+
+  <uses-permission android:name="com.youdu.permission.JPUSH_MESSAGE" />
+  <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
+  <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+  <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+
+  <application
+    android:name=".application.ImoocApplication"
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="@string/app_name"
+    android:theme="@style/AppTheme">
+    <activity
+      android:name=".activity.LoadingActivity"
+      android:screenOrientation="portrait"
+      android:theme="@style/SplashTheme"
+      android:windowSoftInputMode="adjustPan|stateHidden">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+    <activity
+      android:name=".activity.GuideActivity"
+      android:screenOrientation="portrait"
+      android:windowSoftInputMode="adjustPan|stateHidden" />
+    <activity
+      android:name=".activity.HomeActivity"
+      android:launchMode="singleTask"
+      android:screenOrientation="portrait"
+      android:windowSoftInputMode="adjustPan|stateHidden" />
+    <activity
+      android:name=".activity.SettingActivity"
+      android:label="@string/title_activity_setting" />
+    <activity
+      android:name=".activity.SearchActivity"
+      android:screenOrientation="portrait" />
+    <activity
+      android:name=".activity.LoginActivity"
+      android:screenOrientation="portrait"
+      android:windowSoftInputMode="adjustPan|stateHidden" />
+    <activity
+      android:name=".activity.PhotoViewActivity"
+      android:screenOrientation="portrait" />
+    <activity
+      android:name=".activity.MessageActivity"
+      android:screenOrientation="portrait" />
+    <activity
+      android:name=".activity.CourseDetailActivity"
+      android:launchMode="singleTop"
+      android:screenOrientation="portrait" />
+
+    <!-- 本地产品更新列表服务 -->
+    <service android:name=".service.UpdateProductService" />
+    <service android:name=".network.mina.MinaService" />
+    <service android:name=".service.update.UpdateService" />
+
+
+    <!-- 二维码相关 -->
+    <activity
+      android:name=".zxing.app.CaptureActivity"
+      android:configChanges="orientation|keyboardHidden"
+      android:screenOrientation="portrait"
+      android:windowSoftInputMode="stateAlwaysHidden" />
+
+    <!-- shareSDK -->
+    <activity
+      android:name="com.mob.tools.MobUIShell"
+      android:configChanges="keyboardHidden|orientation|screenSize"
+      android:screenOrientation="portrait"
+      android:theme="@android:style/Theme.Translucent.NoTitleBar"
+      android:windowSoftInputMode="stateHidden|adjustResize">
+
+      <!-- QQ和QQ空间分享 QQ登录的回调必须要配置的 -->
+      <intent-filter>
+        <data android:scheme="tencent1104917113" />
+
+        <action android:name="android.intent.action.VIEW" />
+
+        <category android:name="android.intent.category.BROWSABLE" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+    </activity>
+    <!-- 微信分享回调 -->
+    <activity
+      android:name=".wxapi.WXEntryActivity"
+      android:configChanges="keyboardHidden|orientation|screenSize"
+      android:exported="true"
+      android:screenOrientation="portrait"
+      android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+
+    <!-- Jpush相关 配置忘了的话上官网到我的应用中去下载对应的官方例子，查看是如何配置的 -->
+    <!-- Required SDK核心功能 -->
+    <activity
+      android:name="cn.jpush.android.ui.PushActivity"
+      android:configChanges="orientation|keyboardHidden"
+      android:exported="false"
+      android:theme="@android:style/Theme.NoTitleBar">
+      <intent-filter>
+        <action android:name="cn.jpush.android.ui.PushActivity" />
+
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="com.youdu" />
+      </intent-filter>
+    </activity>
+    <!-- Required  SDK核心功能 -->
+    <service
+      android:name="cn.jpush.android.service.DownloadService"
+      android:enabled="true"
+      android:exported="false" />
+
+    <!-- Required SDK 核心功能 -->
+    <!-- 可配置android:process参数将PushService放在其他进程中 -->
+    <service
+      android:name="cn.jpush.android.service.PushService"
+      android:enabled="true"
+      android:exported="false">
+      <intent-filter>
+        <action android:name="cn.jpush.android.intent.REGISTER" />
+        <action android:name="cn.jpush.android.intent.REPORT" />
+        <action android:name="cn.jpush.android.intent.PushService" />
+        <action android:name="cn.jpush.android.intent.PUSH_TIME" />
+      </intent-filter>
+    </service>
+
+    <!-- since 1.8.0 option 可选项。用于同一设备中不同应用的JPush服务相互拉起的功能。 -->
+    <!-- 若不启用该功能可删除该组件，将不拉起其他应用也不能被其他应用拉起 -->
+    <service
+      android:name="cn.jpush.android.service.DaemonService"
+      android:enabled="true"
+      android:exported="true">
+      <intent-filter>
+        <action android:name="cn.jpush.android.intent.DaemonService" />
+
+        <category android:name="com.youdu" />
+      </intent-filter>
+    </service>
+
+    <!-- Required SDK核心功能 -->
+    <receiver
+      android:name="cn.jpush.android.service.PushReceiver"
+      android:enabled="true"
+      android:exported="false">
+      <intent-filter android:priority="1000">
+        <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
+        <!-- Required  显示通知栏 -->
+        <category android:name="com.youdu" />
+      </intent-filter>
+      <intent-filter>
+        <action android:name="android.intent.action.USER_PRESENT" />
+        <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+      </intent-filter>
+      <!-- Optional -->
+      <intent-filter>
+        <action android:name="android.intent.action.PACKAGE_ADDED" />
+        <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+        <data android:scheme="package" />
+      </intent-filter>
+    </receiver>
+
+    <!-- Required SDK核心功能 -->
+    <receiver
+      android:name="cn.jpush.android.service.AlarmReceiver"
+      android:exported="false" />
+
+    <!-- 推送模块自定义部分 -->
+    <activity android:name=".jpush.PushMessageActivity" />
+
+    <receiver
+      android:name=".jpush.JPushReceiver"
+      android:enabled="true"
+      android:exported="false">
+      <intent-filter>
+        <action android:name="cn.jpush.android.intent.REGISTRATION" />
+        <action android:name="cn.jpush.android.intent.UNREGISTRATION" />
+        <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+        <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+        <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+        <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" />
+        <action android:name="cn.jpush.android.intent.CONNECTION" />
+
+        <category android:name="com.youdu" />
+      </intent-filter>
+    </receiver>
+
+    <!--FlutterActivity-->
+    <activity
+      android:name=".flutter.CommonFlutterActivity"
+      android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|layoutDirection|fontScale|screenLayout|density"
+      android:hardwareAccelerated="true"
+      android:launchMode="singleTop"
+      android:windowSoftInputMode="adjustResize">
+      <!-- This keeps the window background of the activity showing
+           until Flutter renders its first frame. It can be removed if
+           there is no splash screen (such as the default splash screen
+           defined in @style/LaunchTheme). -->
+      <meta-data
+        android:name="io.flutter.app.android.SplashScreenUntilFirstFrame"
+        android:value="true" />
+    </activity>
+
+    <!-- Required  . Enable it you can get statistics data with channel -->
+    <meta-data
+      android:name="JPUSH_CHANNEL"
+      android:value="developer-default" />
+    <meta-data
+      android:name="JPUSH_APPKEY"
+      android:value="31c7267ea593bd4b4e96b96a" />
+    <!-- </>值来自开发者平台取得的AppKey -->
+
+
+    <!-- 友盟统计相关meta-data -->
+    <meta-data
+      android:name="UMENG_APPKEY"
+      android:value="57bfe3cbe0f55a0b2e0025b8" />
+    <meta-data
+      android:name="UMENG_CHANNEL"
+      android:value="${UMENG_CHANNEL_VALUE}" />
+    <meta-data
+      android:name="IFLYTEK_APPKEY"
+      android:value="&apos;57c432ae&apos;" />
+    <meta-data
+      android:name="IFLYTEK_CHANNEL"
+      android:value="Android_Demo" />
+
+  </application>
+
 </manifest>

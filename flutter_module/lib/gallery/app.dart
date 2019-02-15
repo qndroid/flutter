@@ -8,20 +8,17 @@ import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
 
-import 'package:url_launcher/url_launcher.dart';
 
 import 'demos.dart';
 import 'home.dart';
 import 'options.dart';
 import 'scales.dart';
 import 'themes.dart';
-import 'updater.dart';
 
 class GalleryApp extends StatefulWidget {
   //Widget自定义构造方法
   const GalleryApp({
     Key key,
-    this.updateUrlFetcher,
     this.enablePerformanceOverlay = true,
     this.enableRasterCacheImagesCheckerboard = true,
     this.enableOffscreenLayersCheckerboard = true,
@@ -29,7 +26,6 @@ class GalleryApp extends StatefulWidget {
     this.testMode = false,
   }) : super(key: key);
 
-  final UpdateUrlFetcher updateUrlFetcher;
   final bool enablePerformanceOverlay;
   final bool enableRasterCacheImagesCheckerboard;
   final bool enableOffscreenLayersCheckerboard;
@@ -117,17 +113,10 @@ class _GalleryAppState extends State<GalleryApp> {
         options: _options,
         onOptionsChanged: _handleOptionsChanged,
         onSendFeedback: widget.onSendFeedback ?? () {
-          launch('https://github.com/flutter/flutter/issues/new/choose', forceSafariVC: false);
         },
       ),
     );
 
-    if (widget.updateUrlFetcher != null) {
-      home = Updater(
-        updateUrlFetcher: widget.updateUrlFetcher,
-        child: home,
-      );
-    }
 
     return MaterialApp(
       theme: _options.theme.data.copyWith(platform: _options.platform),

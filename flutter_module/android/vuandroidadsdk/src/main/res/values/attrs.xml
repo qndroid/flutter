@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="IndentifyingCode">
+    <attr name="codeCount" format="integer|reference"></attr>
+    <attr name="textSize" format="dimension"></attr>
+  </declare-styleable>
+
+  <declare-styleable name="CropView">
+    <!-- Viewport ratio used to compute height based off view width -->
+    <attr name="cropviewViewportRatio" format="float" />
+    <!-- Viewport overlay color -->
+    <attr name="cropviewViewportOverlayColor" format="color" />
+    <!-- Viewport overlay padding -->
+    <attr name="cropviewViewportOverlayPadding" format="dimension" />
+    <!-- Maximum zoom level -->
+    <attr name="cropviewMaxScale" format="float" />
+    <!-- Minimum  zoom level -->
+    <attr name="cropviewMinScale" format="float" />
+    <!-- Shape -->
+    <attr name="cropviewShape" format="enum">
+      <enum name="rectangle" value="0" />
+      <enum name="oval" value="1" />
+    </attr>
+  </declare-styleable>
+</resources>

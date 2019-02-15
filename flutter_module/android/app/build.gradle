@@ -1,40 +1,116 @@
-def flutterPluginVersion = 'managed'
-
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
-    defaultConfig {
-        applicationId "com.lianjia.fluttermodule.host"
-        minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-    }
+  compileSdkVersion 27
 
-    buildTypes {
-        profile {
-            initWith debug
-        }
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
-        }
-    }
+  defaultConfig {
+    applicationId "com.youdu"
+    minSdkVersion 21
+    targetSdkVersion 27
+    versionCode 1
+    versionName "1.0.0"
+    multiDexEnabled true //突破应用方法数65535的一个限制
+    manifestPlaceholders = [UMENG_CHANNEL_VALUE: "imooc"]
 
+    //1.解决arm64-v8a引起的闪退，因为没有64位的libflutter.so文件，flutter当前1.0.0版本的问题
+    ndk {
+      abiFilters "armeabi", "x86", "armeabi-v7a"
+    }
+  }
+
+  signingConfigs {
+
+    debug {}
+    //签名打包
+    release {
+      storeFile file("youdo.jks")
+      storePassword "rzq123456"
+      keyAlias "qndroid"
+      keyPassword "rzq123456"
+    }
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+      signingConfig signingConfigs.release
+
+      //指定我们release包的输出文件名就是我们的渠道名字
+      applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+          def outputFile = output.outputFile
+          if (outputFile != null && outputFile.name.endsWith(".apk")) {
+            def fileName = "${variant.productFlavors[0].name}" + ".apk"
+            //output.outputFile = new File(outputFile.parent, fileName)
+            outputFileName = fileName
+          }
+        }
+      }
+    }
+  }
+
+  lintOptions {
+    abortOnError false
+    //lintConfig file("lint.xml")
+  }
+
+  //使AS知道.so文件的位置
+  sourceSets {
+    main {
+      jniLibs.srcDirs = ['libs']
+    }
+  }
+
+  flavorDimensions "app"
+  //真正的多渠道脚本支持
+  productFlavors {
+    googleplayer {
+      dimension 'app'
+      manifestPlaceholders = [UMENG_CHANNEL_VALUE: "googleplayer"]
+    }
+  }
 }
+
 buildDir = new File(rootProject.projectDir, "../build/host")
 
 dependencies {
-    implementation project(':flutter')
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
-    implementation 'com.android.support:design:27.1.1'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation'com.squareup.okhttp3:okhttp:3.3.0'
+  implementation project(':flutter')
+  implementation fileTree(dir: 'libs', include: ['*.jar'])
+  implementation 'com.android.support:appcompat-v7:27.1.1'
+  implementation project(':vuandroidadsdk') //依赖library原工程
+  //compile(name: 'vuandroidadsdk', ext: 'aar') //依赖library导出的aar包
+  //compile 'com.imooc:vuandroidadsdk:1.0.0.0-SNAPSHOT@aar' //通过maven仓库依赖aar，不需要再将aar传来传去
+
+  implementation 'de.hdodenhof:circleimageview:2.1.0'
+  implementation 'com.readystatesoftware.systembartint:systembartint:1.0.3'
+  //添加友盟统计
+  implementation 'com.umeng.analytics:analytics:latest.integration'
+  implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+  implementation 'com.squareup.okhttp3:okhttp:3.3.0' //okttp依赖
+  implementation(
+      'cn.trinea.android.view.autoscrollviewpager:android-auto-scroll-view-pager:1.1.2') {
+    exclude module: 'support-v4'
+  }
+  implementation 'com.r0adkll:slidableactivity:2.0.5' //滑动关闭Activity库
+  implementation 'com.alipay.euler:andfix:0.5.0@aar' //阿里热修复andfix
+  implementation 'com.squareup.picasso:picasso:[2.4.0, 2.5.2)'
+}
+
+repositories {
+  flatDir {
+    dirs 'libs'
+  }
+}
+
+//强制统一所有support版本
+configurations.all {
+  resolutionStrategy.eachDependency { details ->
+    def requested = details.requested
+    if (requested.group == 'com.android.support') {
+      if (!requested.name.startsWith("multidex")) {
+        details.useVersion '27.1.1'
+      }
+    }
+  }
 }

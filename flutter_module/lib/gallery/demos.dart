@@ -530,15 +530,7 @@ List<GalleryDemo> _buildGalleryDemos() {
       category: _kMedia,
       routeName: ImagesDemo.routeName,
       buildRoute: (BuildContext context) => ImagesDemo(),
-    ),
-    GalleryDemo(
-      title: 'Video',
-      subtitle: 'Video playback',
-      icon: GalleryIcons.drive_video,
-      category: _kMedia,
-      routeName: VideoDemo.routeName,
-      buildRoute: (BuildContext context) => const VideoDemo(),
-    ),
+    )
   ];
 
   // Keep Pesto around for its regression test value. It is not included

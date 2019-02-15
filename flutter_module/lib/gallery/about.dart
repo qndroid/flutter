@@ -6,8 +6,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:flutter/material.dart';
 
-import 'package:url_launcher/url_launcher.dart';
-
 class _LinkTextSpan extends TextSpan {
   // Beware!
   //
@@ -28,7 +26,6 @@ class _LinkTextSpan extends TextSpan {
             text: text ?? url,
             recognizer: TapGestureRecognizer()
               ..onTap = () {
-                launch(url, forceSafariVC: false);
               });
 }
 
